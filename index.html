@@ -1,0 +1,537 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Jenna Ortega — Meet & Greet</title>
+  <meta name="description" content="Buy meet-and-greet tickets. Bank-transfer payments. Upload payment proof.">  <!-- Google font -->  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">  <style>
+    :root{
+      --bg:#0f1724; /* dark slate */
+      --card:#0b1220;
+      --muted:#94a3b8;
+      --accent:#6ee7b7; /* mint */
+      --accent-2:#60a5fa; /* blue */
+      --glass: rgba(255,255,255,0.04);
+      --maxw:1100px;
+      color-scheme: dark;
+      font-family: 'Inter',system-ui,Segoe UI,Roboto,Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg) 0%, #071023 100%);color:#e6eef8}
+    .wrap{max-width:var(--maxw);margin:28px auto;padding:28px}
+
+    header{display:flex;align-items:center;gap:20px}
+    .logo{display:flex;flex-direction:column}
+    .brand{font-weight:800;font-size:20px;letter-spacing:0.4px}
+    .tag{color:var(--muted);font-size:13px}
+
+    nav{margin-left:auto;display:flex;gap:12px}
+    nav a{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:8px}
+    nav a.active, nav a:hover{background:var(--glass);color:var(--accent)}
+
+    .hero{display:grid;grid-template-columns:1fr 420px;gap:28px;margin-top:28px;align-items:center}
+    .hero-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);padding:28px;border-radius:16px}
+    .hero h1{margin:0;font-size:34px}
+    .hero p{color:var(--muted);margin:12px 0 20px}
+    .cta{display:flex;gap:12px}
+    .btn{background:linear-gradient(90deg,var(--accent),var(--accent-2));border:none;padding:12px 18px;border-radius:10px;color:#072032;font-weight:700;cursor:pointer}
+    .btn.secondary{background:transparent;color:var(--accent);border:1px solid rgba(110,231,183,0.12)}
+
+    .ticket-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+    .ticket{background:linear-gradient(180deg, rgba(255,255,255,0.015), transparent);padding:16px;border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+    .ticket h3{margin:0;font-size:16px}
+    .price{font-weight:800;font-size:20px;margin-top:8px}
+    .muted{color:var(--muted)}
+
+    /* pages area */
+    main{margin-top:28px;display:grid;gap:24px}
+    section.card{background:var(--card);padding:18px;border-radius:14px;border:1px solid rgba(255,255,255,0.02)}
+
+    /* Tickets page layout */
+    .tickets-layout{display:grid;grid-template-columns:1fr 380px;gap:18px}
+    .bank{padding:14px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);border:1px solid rgba(255,255,255,0.02)}
+    .bank h3{margin:0}
+    .bank .acc{margin-top:8px;display:flex;flex-direction:column;gap:6px}
+    .bank .acc code{background:rgba(255,255,255,0.03);padding:8px;border-radius:8px}
+    .copy{display:inline-flex;gap:8px;align-items:center;margin-top:10px}
+    .copy button{background:transparent;border:1px solid rgba(255,255,255,0.03);padding:8px;border-radius:8px;color:var(--muted);cursor:pointer}
+
+    form .row{display:flex;gap:10px}
+    label{display:block;margin-bottom:6px;color:var(--muted);font-size:13px}
+    input[type=text],input[type=email],input[type=tel],select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:inherit}
+    input[type=file]{color:var(--muted)}
+    .submit{display:flex;gap:10px;align-items:center}
+
+    footer{margin-top:28px;color:var(--muted);font-size:13px;text-align:center}
+
+    /* responsive */
+    @media (max-width:900px){.hero{grid-template-columns:1fr} .tickets-layout{grid-template-columns:1fr} .ticket-grid{grid-template-columns:repeat(2,1fr)} }
+    @media (max-width:520px){.ticket-grid{grid-template-columns:1fr} header{flex-direction:column;align-items:flex-start} nav{margin-left:0} }
+
+    /* small helpers */
+    .notice{background:rgba(255,255,255,0.02);padding:10px;border-radius:8px;color:var(--muted);font-size:13px}
+    .success{color:#88ffcf}
+/* Header alignment */
+/* Header container (align logo + hamburger) */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  position: relative;
+  z-index: 1001; /* make sure header is always above nav */
+}
+
+/* Logo styling */
+.logo .brand {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--muted);
+}
+.logo .tag {
+  font-size: 12px;
+  color: var(--muted);
+  opacity: 0.7;
+}
+
+/* Hamburger button (3 lines) */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 28px;
+  height: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1002;
+}
+
+.hamburger span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background: var(--muted);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+/* Animate into X */
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translateY(8px);
+}
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translateY(-8px);
+}
+
+/* Mobile nav dropdown */
+@media (max-width: 768px) {
+  nav {
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    background: var(--card);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    width: 200px;
+    z-index: 1000;
+  }
+  nav.open {
+    max-height: 400px;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  nav a {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .hamburger {
+    display: flex;
+  }
+}
+}
+  </style></head>
+<body>
+ 
+  <div class="wrap">
+    <header class="headr">
+  <div class="logo">
+    <div class="brand">Jenna Ortega</div>
+    <div class="tag">Official Meet & Greet — 2025</div>
+  </div>
+
+  <!-- Hamburger -->
+  <button class="hamburger" aria-label="Menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</header>
+
+<nav>
+  <a href="#home" class="nav-link active">Home</a>
+  <a href="#about" class="nav-link">About</a>
+  <a href="#tickets" class="nav-link">Tickets</a>
+  <a href="#gallery" class="nav-link">Gallery</a>
+  <a href="#contact" class="nav-link">Contact</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-card">
+    <h1>Meet & Greet with Jenna Ortega</h1>
+    <p>Get a chance to meet Jenna Ortega in-person. Limited VIP & Meet-and-Greet spots available. Pay by bank transfer and upload proof below.</p>
+    <div class="cta">
+      <button class="btn" onclick="document.querySelector('#tickets').scrollIntoView({behavior:'smooth'})">Get Tickets</button>
+      <button class="btn secondary" onclick="openPromo()">Event Info</button>
+    </div>
+
+    <div class="ticket-grid" style="margin-top:18px">
+      <div class="ticket">
+        <h3>Standard</h3>
+        <div class="price">UAH25,000</div>
+        <div class="muted">Entry only</div>
+      </div>
+      <div class="ticket">
+        <h3>VIP</h3>
+        <div class="price">UAH35,000</div>
+        <div class="muted">Priority seating + small merch</div>
+      </div>
+      <div class="ticket">
+        <h3>Meet & Greet</h3>
+        <div class="price">UAH45,000</div>
+        <div class="muted">Photo with Jenna + signed item</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="border-radius:16px;overflow:hidden;align-self:start">
+    <img src="photo1.jpg" alt="Artist" style="display:block;width:100%;height:100%;object-fit:cover;min-height:260px">
+  </div>
+</div>
+
+<main>
+  <section id="about" class="card">
+    <h2>About the Event</h2>
+    <p class="muted">This meet-and-greet is a celebration of the fans. Expect a short live set, Q&amp;A, photos, and signed merch. Tickets are limited — be sure to secure yours by following the bank transfer steps on the Tickets page.</p>
+    <p>Venue: Kyiv Ukraine house</p> 
+<p>Time: 9:00 am to 6:00 pm</p>
+<p>Date: October 17-19</p>
+  </section>
+
+  <section id="tickets" class="card">
+    <h2>Tickets & Payment (Bank Transfer)</h2>
+    <div class="tickets-layout">
+      <div>
+        <div class="notice">Follow these steps: <ol>
+          <li>Choose ticket type and amount shown above.</li>
+          <li>Transfer to the account on the right.</li>
+          <li>Submit the form with your transfer screenshot.</li>
+          <li>Wait for our confirmation (we will reply by email or WhatsApp).</li>
+        </ol></div>
+
+            <form id="paymentForm" action="https://formspree.io/f/mblzydwl" method="POST">
+  <div style="display:grid;gap:12px;margin-top:12px">
+    
+    <div>
+      <label>Full name</label>
+      <input type="text" id="name" name="name" required placeholder="Your full name">
+    </div>
+
+    <div>
+      <label>Email</label>
+      <input type="email" id="email" name="email" required placeholder="you@example.com">
+    </div>
+
+    <div class="row">
+      <div style="flex:1">
+        <label>Phone</label>
+        <input type="tel" id="phone" name="phone" required placeholder="+380...">
+      </div>
+      <div style="width:180px">
+        <label>Ticket type</label>
+        <select id="ticketType" name="ticketType">
+          <option value="Standard">Standard — USH25,000</option>
+          <option value="VIP">VIP — UAH35,000</option>
+          <option value="Meet & Greet">Meet & Greet — UAH45,000</option>
+        </select>
+      </div>
+    </div>
+
+    <div>
+      <label>Transfer transaction ID (or teller ref)</label>
+      <input type="text" id="txid" name="txid" placeholder="Example: 1234567890">
+    </div>
+
+    <div>
+      <label>Upload proof of payment (screenshot or pdf)</label>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSfgEhDua5NMuVx4cgnNnENWkWRWAEUP00POA2pzQDkO5OuwNA/viewform?usp=header" target="_blank">
+        Upload here
+      </a>
+    </div>
+
+    <div class="submit">
+      <button type="submit" class="btn">Submit Payment Proof</button>
+      <button type="button" class="btn secondary" onclick="saveLocally()">Save Locally</button>
+    </div>
+
+    <div id="formMessage" class="muted"></div>
+  </div>
+</form>
+      </div>
+
+      <aside class="bank">
+        <h3>Bank Details</h3>
+        <div class="acc">
+          <code id="bankName">Abank</code>
+          <code id="accName">Паловський Юрій Богданович</code>
+          <code id="accNumber">4400004416695799</code>
+        </div>
+
+        <div class="copy">
+          <button onclick="copyBank()">Copy account number</button>
+          <button onclick="showWhatsApp()">Open WhatsApp</button>
+        </div>
+
+        <hr style="margin:12px 0;border:none;border-top:1px solid rgba(255,255,255,0.02)">
+        <div class="muted">After transfer, upload proof above. We'll confirm by email/WhatsApp and send your e-ticket PDF.</div>
+        <div style="margin-top:12px">
+          <strong>Support</strong>
+          <div class="muted">Telegram: <a href="https://t.me/Jenna0rtegaofficial" style="color:var(--accent)">Contact us</a></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section id="gallery" class="card">
+    <h2>Gallery</h2>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px">
+      <img src="photo2.jpg" style="width:100%;height:150px;object-fit:cover;border-radius:8px">
+      <img src="photo3.jpg" style="width:100%;height:150px;object-fit:cover;border-radius:8px">
+      <img src="photo4.jpg" style="width:100%;height:150px;object-fit:cover;border-radius:8px">
+    </div>
+  </section>
+
+  <section id="contact" class="card">
+    <h2>Contact</h2>
+    <p class="muted">For booking queries or press, <a href="https://t.me/Jenna0rtegaofficial" style="color:var(--accent)"> Contact US </a>. For quick support, use WhatsApp link in the Tickets card.</p>
+  </section>
+
+</main>
+
+<footer>
+  © 2025 Meet & Greet. All Rights Reserved.   
+Privacy Policy | Terms & Conditions
+</footer>
+
+  </div>  <!-- Libraries: jsPDF for PDF ticket generation, QRCode lib -->  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>  <script>
+    /* =====================
+       CONFIG — change these values before going live
+       ===================== */
+    const CONFIG = {
+      bankName: 'Abank',
+      accName: 'Паловський Юрій Богданович',
+      accNumber: 'Card:4400004416695799',
+      countryCurrency: 'UAH',
+
+      // Optional -- if you want form submissions delivered automatically, set FORM_ENDPOINT to your Formspree / Netlify / webhook URL
+      // Example Formspree endpoint: 'https://formspree.io/f/yourid' . If empty, the form will just validate locally and create a downloadable ticket.
+      FORM_ENDPOINT: ''
+    };
+
+    // Apply config to page
+    document.getElementById('bankName').textContent = CONFIG.bankName;
+    document.getElementById('accName').textContent = CONFIG.accName;
+    document.getElementById('accNumber').textContent = CONFIG.accNumber;
+
+    // Navigation smooth
+    document.querySelectorAll('.nav-link').forEach(a=>{
+      a.addEventListener('click', e=>{
+        e.preventDefault();
+        document.querySelectorAll('.nav-link').forEach(x=>x.classList.remove('active'));
+        a.classList.add('active');
+        const id = a.getAttribute('href').slice(1);
+        document.getElementById(id).scrollIntoView({behavior:'smooth'});
+      });
+    });
+
+    // Copy bank
+    function copyBank(){
+      navigator.clipboard.writeText(CONFIG.accNumber).then(()=>{
+        alert('Account number copied to clipboard');
+      }).catch(()=>alert('Copy failed — manually copy the account number'));
+    }
+
+    function showWhatsApp(){
+      const phone = prompt('Enter your phone with country code (e.g. +380...) to open WhatsApp chat:');
+      if(!phone) return;
+      const text = encodeURIComponent('Hi, I just transferred for the Paul Obunwa Meet & Greet. Please confirm.');
+      window.open(`https://wa.me/${phone.replace(/\D/g,'')}?text=${text}`,'_blank');
+    }
+
+    // FORM handling
+    const form = document.getElementById('paymentForm');
+    const msg = document.getElementById('formMessage');
+
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      msg.textContent = '';
+
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const ticketType = document.getElementById('ticketType').value;
+      const txid = document.getElementById('txid').value.trim();
+      const proof = document.getElementById('proof').files[0];
+
+      if(!name||!email||!phone||!proof){ msg.textContent='Please fill all required fields.'; return }
+
+      // create a short ticket id
+      const ticketId = 'PB-'+Date.now().toString(36).slice(-8).toUpperCase();
+
+      // read file as base64 for local storage + optional send
+      const fileData = await fileToBase64(proof);
+
+      const submission = {ticketId,name,email,phone,ticketType,txid,uploadedAt:new Date().toISOString(),fileName:proof.name,fileData};
+
+      // If FORM_ENDPOINT is set, POST the submission there (must accept JSON). Otherwise, save locally and generate ticket.
+      if(CONFIG.FORM_ENDPOINT){
+        try{
+          const res = await fetch(CONFIG.FORM_ENDPOINT,{
+            method:'POST',headers:{'Content-Type':'application/json'},body: JSON.stringify(submission)
+          });
+          if(res.ok){
+            msg.innerHTML = 'Submission received. A confirmation will be sent to your email shortly.';
+            generateTicketPDF(submission);
+          }else{
+            msg.innerHTML = 'Failed to submit to server. Saving locally instead.';
+            saveSubmissionLocal(submission);
+            generateTicketPDF(submission);
+          }
+        }catch(err){
+          console.error(err);
+          msg.innerHTML = 'Network error. Saved locally. Use the contact details to notify us.';
+          saveSubmissionLocal(submission);
+          generateTicketPDF(submission);
+        }
+      } else {
+        // no endpoint configured — save locally and generate ticket PDF
+        saveSubmissionLocal(submission);
+        msg.innerHTML = 'Proof saved locally and ticket generated below. We will contact you to confirm.';
+        generateTicketPDF(submission);
+      }
+
+      form.reset();
+    });
+
+    function fileToBase64(file){
+      return new Promise((res,rej)=>{
+        const reader = new FileReader();
+        reader.onload = ()=>res(reader.result);
+        reader.onerror = ()=>rej('File read error');
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function saveSubmissionLocal(sub){
+      const key = 'pg_submissions_v1';
+      const list = JSON.parse(localStorage.getItem(key) || '[]');
+      list.push(sub);
+      localStorage.setItem(key, JSON.stringify(list));
+    }
+
+    function saveLocally(){
+      const name = document.getElementById('name').value.trim();
+      if(!name){ alert('Enter name to save'); return }
+      alert('The form data will be saved locally in your browser until you clear storage. You still must send proof to us.');
+    }
+
+    // Generate a simple ticket PDF using jsPDF and a QR code
+    async function generateTicketPDF(sub){
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({orientation:'portrait',unit:'pt',format:'a4'});
+
+      doc.setFontSize(20); doc.setTextColor(8,20,30);
+      doc.text('Paul Obunwa — Meet & Greet Ticket',40,60);
+
+      doc.setFontSize(14); doc.setTextColor(40,40,40);
+      doc.text(`Ticket ID: ${sub.ticketId}`,40,100);
+      doc.text(`Name: ${sub.name}`,40,122);
+      doc.text(`Email: ${sub.email}`,40,144);
+      doc.text(`Phone: ${sub.phone}`,40,166);
+      doc.text(`Ticket type: ${sub.ticketType}`,40,188);
+
+      // Add bank info as reminder
+      doc.setFontSize(11);
+      doc.text(`Bank: ${CONFIG.bankName}`,40,220);
+      doc.text(`Acct name: ${CONFIG.accName}`,40,236);
+      doc.text(`Acct number: ${CONFIG.accNumber}`,40,252);
+
+      // Create QR code canvas then add to PDF
+      const qrCanvas = document.createElement('div');
+      new QRCode(qrCanvas, {text:sub.ticketId + '|' + sub.name, width:120,height:120});
+      await new Promise(r=>setTimeout(r,250));
+      const img = qrCanvas.querySelector('img') || qrCanvas.querySelector('canvas');
+      if(img){
+        const dataUrl = img.tagName === 'IMG' ? img.src : img.toDataURL('image/png');
+        doc.addImage(dataUrl,'PNG',400,90,120,120);
+      }
+
+      // small note
+      doc.setFontSize(10); doc.setTextColor(80,80,80);
+      doc.text('Show this ticket on arrival. This ticket is valid only after we confirm your transfer.',40,320);
+
+      const pdfBlob = doc.output('blob');
+      const url = URL.createObjectURL(pdfBlob);
+
+      // Show download link on page
+      const a = document.createElement('a');
+      a.href = url; a.download = `${sub.ticketId}_${sub.name.replace(/\s+/g,'_')}.pdf`;
+      a.textContent = 'Download your ticket PDF';
+      a.style.display='inline-block'; a.style.marginTop='12px'; a.className='btn';
+
+      const fm = document.getElementById('formMessage');
+      // remove old download links
+      const old = fm.querySelector('a'); if(old) old.remove();
+      fm.appendChild(a);
+    }
+
+    function openPromo(){
+      alert('Promo: First 20 buyers get 10% off merch at the event. Bring your ticket!');
+    }
+
+    // Accessibility small fix: disable file drag-drop default
+    window.addEventListener('dragover',e=>e.preventDefault());
+    window.addEventListener('drop',e=>e.preventDefault());
+
+    
+    =============================================== */
+    // Hamburger toggle
+const hamburger = document.querySelector('.hamburger');
+const nav = document.querySelector('nav');
+
+hamburger.addEventListener('click', () => {
+  nav.classList.toggle('open');
+  hamburger.classList.toggle('active');
+});
+
+// Close menu on link click
+document.querySelectorAll('nav a').forEach(link => {
+  link.addEventListener('click', () => {
+    nav.classList.remove('open');
+    hamburger.classList.remove('active');
+  });
+});
+
+  </script></body>
+</html>
